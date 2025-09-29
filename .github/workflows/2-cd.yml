@@ -31,8 +31,8 @@ jobs:
         run: |
           IMAGE_TAG=${{ github.sha }}
           
-          sed -i "s|sit72.azurecr.io/product-service:latest|${{ env.ACR_LOGIN_SERVER }}/product-service:${IMAGE_TAG}|g" k8s/1-product-service.yml
-          sed -i "s|sit72.azurecr.io/order-service:latest|${{ env.ACR_LOGIN_SERVER }}/order-service:${IMAGE_TAG}|g" k8s/2-order-service.yml
-          sed -i "s|sit72.azurecr.io/customer-service:latest|${{ env.ACR_LOGIN_SERVER }}/customer-service:${IMAGE_TAG}|g" k8s/3-customer-service.yml
+          sed -i "s|sit72.azurecr.io/product-service:latest|${{ env.ACR_LOGIN_SERVER }}/product-service:${IMAGE_TAG}|g" k8s/product-service.yml
+          sed -i "s|sit72.azurecr.io/order-service:latest|${{ env.ACR_LOGIN_SERVER }}/order-service:${IMAGE_TAG}|g" k8s/order-service.yml
+          sed -i "s|sit72.azurecr.io/customer-service:latest|${{ env.ACR_LOGIN_SERVER }}/customer-service:${IMAGE_TAG}|g" k8s/customer-service.yml
 
           kubectl apply -f k8s/
