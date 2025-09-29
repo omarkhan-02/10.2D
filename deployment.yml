@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: week10-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: week10-app
+  template:
+    metadata:
+      labels:
+        app: week10-app
+    spec:
+      containers:
+      - name: week10-app
+        image: IMAGE_PLACEHOLDER
+        ports:
+        - containerPort: 3000
