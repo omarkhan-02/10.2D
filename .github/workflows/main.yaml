@@ -26,9 +26,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./week10
 
       - name: Run unit tests
         run: npm test
+        working-directory: ./week10
 
   build_and_push_image:
     name: 🏗️ Build and Push Image
