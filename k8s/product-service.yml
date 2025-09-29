@@ -1,0 +1,48 @@
+# k8s/1-product-service.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      containers:
+      - name: product-service
+        image: sit72.azurecr.io/product-service:latest # Placeholder
+        ports:
+        - containerPort: 8000
+        env:
+        - name: POSTGRES_USER
+          value: "YOUR_POSTGRES_USER"
+        - name: POSTGRES_PASSWORD
+          value: "YOUR_POSTGRES_PASSWORD"
+        - name: POSTGRES_DB
+          value: "products"
+        - name: POSTGRES_HOST
+          value: "YOUR_POSTGRES_HOST"
+        - name: AZURE_STORAGE_ACCOUNT_NAME
+          value: "sit72"
+        - name: AZURE_STORAGE_ACCOUNT_KEY
+          value: "YOUR_AZURE_STORAGE_KEY"
+        - name: RABBITMQ_HOST
+          value: "rabbitmq-service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  selector:
+    app: product-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: LoadBalancer

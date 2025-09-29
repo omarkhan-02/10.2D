@@ -1,0 +1,44 @@
+# k8s/2-order-service.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+      - name: order-service
+        image: sit72.azurecr.io/order-service:latest # Placeholder
+        ports:
+        - containerPort: 8000
+        env:
+        - name: POSTGRES_USER
+          value: "YOUR_POSTGRES_USER"
+        - name: POSTGRES_PASSWORD
+          value: "YOUR_POSTGRES_PASSWORD"
+        - name: POSTGRES_DB
+          value: "orders"
+        - name: POSTGRES_HOST
+          value: "YOUR_POSTGRES_HOST"
+        - name: RABBITMQ_HOST
+          value: "rabbitmq-service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: order-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: LoadBalancer

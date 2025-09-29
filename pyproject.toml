@@ -1,0 +1,26 @@
+# pyproject.toml
+[tool.poetry]
+name = "ecommerce-python-microservices"
+version = "0.1.0"
+description = "FastAPI microservices for an e-commerce application."
+authors = ["Omarkhan <omarkhan-02@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.111.0"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
+sqlalchemy = "^2.0.29"
+psycopg2-binary = "^2.9.9"
+gunicorn = "^22.0.0"
+aio-pika = "^9.4.0"
+azure-storage-blob = "^12.19.1"
+pydantic = {extras = ["email"], version = "^2.7.1"}
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+requests = "^2.31.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

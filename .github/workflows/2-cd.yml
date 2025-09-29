@@ -1,0 +1,38 @@
+# .github/workflows/2-cd.yml
+name: 2. CD - Deploy All Services to AKS
+
+on:
+  workflow_dispatch:
+
+env:
+  ACR_LOGIN_SERVER: sit72.azurecr.io
+  AKS_CLUSTER_NAME: sit72
+  RESOURCE_GROUP: deakinuni
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set Kubernetes context to AKS cluster
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.AKS_CLUSTER_NAME }}
+
+      - name: Deploy All Services to AKS
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          
+          sed -i "s|sit72.azurecr.io/product-service:latest|${{ env.ACR_LOGIN_SERVER }}/product-service:${IMAGE_TAG}|g" k8s/1-product-service.yml
+          sed -i "s|sit72.azurecr.io/order-service:latest|${{ env.ACR_LOGIN_SERVER }}/order-service:${IMAGE_TAG}|g" k8s/2-order-service.yml
+          sed -i "s|sit72.azurecr.io/customer-service:latest|${{ env.ACR_LOGIN_SERVER }}/customer-service:${IMAGE_TAG}|g" k8s/3-customer-service.yml
+
+          kubectl apply -f k8s/

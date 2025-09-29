@@ -1,0 +1,44 @@
+# k8s/3-customer-service.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-service
+  template:
+    metadata:
+      labels:
+        app: customer-service
+    spec:
+      containers:
+      - name: customer-service
+        image: sit72.azurecr.io/customer-service:latest # Placeholder
+        ports:
+        - containerPort: 8000
+        env:
+        - name: POSTGRES_USER
+          value: "YOUR_POSTGRES_USER"
+        - name: POSTGRES_PASSWORD
+          value: "YOUR_POSTGRES_PASSWORD"
+        - name: POSTGRES_DB
+          value: "customers"
+        - name: POSTGRES_HOST
+          value: "YOUR_POSTGRES_HOST"
+        - name: RABBITMQ_HOST
+          value: "rabbitmq-service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-service
+spec:
+  selector:
+    app: customer-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: LoadBalancer
